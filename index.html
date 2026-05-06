@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mahiru-chan AI Companion</title>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    .provider-tabs{display:flex;gap:8px;margin-bottom:10px;justify-content:center;}
+    .tab-btn{flex:1;padding:8px 0;border-radius:20px;border:2px solid rgba(255,182,193,0.4);background:rgba(255,255,255,0.08);color:#fff;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer;transition:.2s;}
+    .tab-btn.active{background:linear-gradient(135deg,#ff85a1,#ff5c8d);border-color:#ff5c8d;box-shadow:0 2px 12px rgba(255,92,141,0.4);}
+    .provider-hint{font-size:11px;color:rgba(255,255,255,0.55);margin:-4px 0 8px;text-align:center;}
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Klee+One:wght@400;600&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<!-- ========== LOGIN PAGE ========== -->
+<div id="loginPage" class="page active">
+  <div class="login-bg"></div>
+  <div class="sakura-rain" id="sakuraLogin"></div>
+  <div class="login-card">
+    <div class="login-avatar-wrap">
+      <div class="avatar-ring"></div>
+      <img src="avatar.jpg" class="login-avatar-img" alt="Mahiru"/>
+      <div class="avatar-sparkles">
+        <span class="sp sp1">✦</span><span class="sp sp2">✧</span>
+        <span class="sp sp3">✦</span><span class="sp sp4">✧</span>
+      </div>
+    </div>
+    <h1 class="login-title">Mahiru-chan ♡</h1>
+    <p class="login-sub">AI Companion ~ Masukkan API Key untuk memulai</p>
+    <div class="provider-tabs">
+      <button class="tab-btn active" id="tab-anthropic" onclick="selectProvider('anthropic')">🤖 Anthropic</button>
+      <button class="tab-btn" id="tab-groq" onclick="selectProvider('groq')">⚡ Groq</button>
+    </div>
+    <div class="field-wrap">
+      <input type="password" id="apiKeyInput" placeholder="sk-ant-api..."/>
+      <button class="eye-btn" onclick="togglePw()" type="button">👁</button>
+    </div>
+    <p class="provider-hint" id="providerHint">Format: sk-ant-api... (Anthropic Claude)</p>
+    <label class="check-label">
+      <input type="checkbox" id="rememberMe" checked/>
+      <span>Ingat saya (tidak perlu input ulang)</span>
+    </label>
+    <button class="login-btn" onclick="doLogin()">Mulai ♡</button>
+    <p class="err-msg" id="errMsg"></p>
+  </div>
+</div>
+
+<!-- ========== MAIN APP ========== -->
+<div id="mainApp" class="page">
+  <div class="scene-bg"></div>
+  <div class="sakura-rain" id="sakuraMain"></div>
+
+  <!-- Demo content area -->
+  <div class="demo-content">
+    <div class="demo-card">
+      <h2>🌸 Mahiru-chan menemanimu!</h2>
+      <p>AI companion ada di pojok kanan bawah~<br>Klik avatar Mahiru untuk membuka chat!</p>
+      <div class="demo-hints">
+        <span>💬 Chat AI</span>
+        <span>📹 Video Call</span>
+        <span>🌀 Hologram 3D</span>
+        <span>🎭 Ekspresi Emosi</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== COMPANION WIDGET ===== -->
+  <div id="companionWidget" class="companion-widget">
+
+    <!-- Speech Bubble -->
+    <div class="speech-bubble" id="speechBubble"></div>
+
+    <!-- Floating Avatar Button -->
+    <div class="companion-avatar-btn" id="companionToggle" onclick="togglePanel()">
+      <div class="companion-emotion-overlay" id="emotionOverlay"></div>
+      <img src="avatar.jpg" class="companion-av-img" id="compAvImg"/>
+      <div class="emotion-badge" id="emotionBadge">😊</div>
+      <div class="pulse-ring"></div>
+    </div>
+
+    <!-- Expanded Panel -->
+    <div class="companion-panel" id="companionPanel">
+
+      <!-- Header -->
+      <div class="panel-header">
+        <div class="panel-hdr-left">
+          <img src="avatar.jpg" class="pnl-av"/>
+          <div>
+            <span class="pnl-name">Mahiru-chan</span>
+            <span class="pnl-emo-text" id="emoText">😊 Senang</span>
+          </div>
+        </div>
+        <div class="panel-hdr-right">
+          <button class="pnl-btn" onclick="openHologram()" title="Hologram 3D">🌀</button>
+          <button class="pnl-btn" onclick="openVC()" title="Video Call">📹</button>
+          <button class="pnl-btn" onclick="doLogout()" title="Logout">🚪</button>
+          <button class="pnl-btn" onclick="togglePanel()" title="Tutup">✕</button>
+        </div>
+      </div>
+
+      <!-- Emotion Picker -->
+      <div class="emotion-picker">
+        <button class="ep-btn active" id="ep-happy"    onclick="triggerEmotion('happy')">😊</button>
+        <button class="ep-btn"        id="ep-excited"  onclick="triggerEmotion('excited')">🤩</button>
+        <button class="ep-btn"        id="ep-shy"      onclick="triggerEmotion('shy')">😳</button>
+        <button class="ep-btn"        id="ep-sad"      onclick="triggerEmotion('sad')">😢</button>
+        <button class="ep-btn"        id="ep-angry"    onclick="triggerEmotion('angry')">😠</button>
+        <button class="ep-btn"        id="ep-love"     onclick="triggerEmotion('love')">🥰</button>
+        <button class="ep-btn"        id="ep-surprised" onclick="triggerEmotion('surprised')">😲</button>
+        <button class="ep-btn"        id="ep-sleepy"   onclick="triggerEmotion('sleepy')">😴</button>
+      </div>
+
+      <!-- Chat Messages -->
+      <div class="panel-chat" id="panelChat">
+        <div class="chat-welcome-msg">
+          Haii Senpai~! ♡ Aku Mahiru!<br>
+          <small>Ketik atau bicara untuk mengobrol 🌸</small>
+        </div>
+      </div>
+
+      <!-- Input Row -->
+      <div class="panel-input">
+        <button class="mic-btn" id="micBtn" onclick="toggleVoice()">🎤</button>
+        <input type="text" id="chatInput" placeholder="Pesan untuk Mahiru..."
+               onkeydown="if(event.key==='Enter')sendMsg()"/>
+        <button class="send-btn" onclick="sendMsg()">➤</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== HOLOGRAM MODAL ===== -->
+  <div id="holoModal" class="modal">
+    <div class="modal-bg" onclick="closeHologram()"></div>
+    <div class="holo-container">
+      <div class="holo-ring">
+        <div class="holo-scanline"></div>
+        <canvas id="holoCanvas"></canvas>
+      </div>
+      <p class="holo-label">◈ HOLOGRAM MODE ◈</p>
+      <button class="modal-close" onclick="closeHologram()">✕ Tutup</button>
+    </div>
+  </div>
+
+  <!-- ===== VIDEO CALL MODAL ===== -->
+  <div id="vcModal" class="modal">
+    <div class="modal-bg" onclick="closeVC()"></div>
+    <div class="vc-card">
+      <div class="vc-header">
+        <img src="avatar.jpg" class="vc-av"/>
+        <div class="vc-info">
+          <p class="vc-name">Mahiru-chan</p>
+          <p class="vc-status" id="vcStatus">Menghubungkan...</p>
+        </div>
+        <div class="vc-emo" id="vcEmo">😊</div>
+      </div>
+      <div class="vc-visual-wrap">
+        <img src="avatar.jpg" class="vc-main" id="vcMain"/>
+        <div class="vc-emotion-anim" id="vcEmoAnim"></div>
+        <div class="vc-wave" id="vcWave">
+          <span></span><span></span><span></span><span></span><span></span>
+        </div>
+      </div>
+      <p class="vc-caption" id="vcCaption"></p>
+      <div class="vc-controls">
+        <button class="vc-ctrl mute" id="muteBtn" onclick="toggleMute()">🎙</button>
+        <button class="vc-ctrl end"  onclick="closeVC()">📵</button>
+        <button class="vc-ctrl speak" onclick="mahiruSpeakRandom()">🔊</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /mainApp -->
+
+<script src="emotions.js"></script>
+<script src="hologram.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

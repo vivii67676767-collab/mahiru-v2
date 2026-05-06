@@ -1,0 +1,401 @@
+/* ============================================================
+   YUKI-CHAN AI COMPANION — style.css
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body { font-family: 'Nunito', sans-serif; background: #0d0d1f; color: #fff; }
+
+/* ── PAGES ─────────────────────────────────────────────── */
+.page { position: fixed; inset: 0; opacity: 0; pointer-events: none; transition: opacity .6s; }
+.page.active { opacity: 1; pointer-events: all; }
+
+/* ── SAKURA RAIN ────────────────────────────────────────── */
+.sakura-rain { position: fixed; inset: 0; pointer-events: none; z-index: 1; overflow: hidden; }
+.petal {
+  position: absolute; top: -20px;
+  width: 10px; height: 10px;
+  background: radial-gradient(circle at 30% 30%, #ffcdd8, #ff85a1);
+  border-radius: 0 50% 50% 50%; rotate: 45deg;
+  animation: petalFall linear infinite;
+  opacity: .7;
+}
+@keyframes petalFall {
+  0%   { transform: translateY(0)    rotate(0deg);   opacity: .8; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0;  }
+}
+
+/* ── LOGIN ──────────────────────────────────────────────── */
+.login-bg {
+  position: fixed; inset: 0; z-index: 0;
+  background: url('background.jpg') center/cover no-repeat;
+  filter: blur(6px) brightness(.45);
+}
+.login-card {
+  position: relative; z-index: 10;
+  width: min(360px, 92vw); margin: 0 auto;
+  top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,.07);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255,180,200,.25);
+  border-radius: 28px; padding: 40px 28px 32px;
+  text-align: center;
+  box-shadow: 0 8px 60px rgba(255,105,180,.25);
+}
+.login-avatar-wrap {
+  position: relative; width: 92px; height: 92px;
+  margin: 0 auto 18px;
+}
+.login-avatar-img {
+  width: 92px; height: 92px; border-radius: 50%;
+  object-fit: cover; border: 3px solid rgba(255,182,193,.6);
+  position: relative; z-index: 2;
+}
+.avatar-ring {
+  position: absolute; inset: -5px; border-radius: 50%; z-index: 1;
+  background: conic-gradient(#ff69b4, #ffb7c5, #c084fc, #ff69b4);
+  animation: spinRing 3s linear infinite;
+}
+@keyframes spinRing { to { transform: rotate(360deg); } }
+.avatar-sparkles { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.sp {
+  position: absolute; font-size: .9rem; color: #ffecf5;
+  animation: sparkle 2s ease-in-out infinite;
+}
+.sp1 { top: -8px; left: 50%;  animation-delay: 0s;    }
+.sp2 { top: 50%;  right: -10px; animation-delay: .5s;  }
+.sp3 { bottom: -8px; left: 50%; animation-delay: 1s;   }
+.sp4 { top: 50%;  left: -10px; animation-delay: 1.5s;  }
+@keyframes sparkle { 0%,100%{opacity:0;transform:scale(.5)} 50%{opacity:1;transform:scale(1.2)} }
+
+.login-title { font-family: 'Klee One', cursive; font-size: 1.6rem; color: #fff; font-weight: 600; }
+.login-sub   { color: rgba(255,255,255,.55); font-size: .82rem; margin: 6px 0 22px; }
+
+.field-wrap { position: relative; margin-bottom: 12px; }
+.field-wrap input {
+  width: 100%; padding: 12px 44px 12px 16px;
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,182,193,.35);
+  border-radius: 14px; color: #fff; font-family: 'Nunito',sans-serif;
+  font-size: .9rem; outline: none; transition: border .3s;
+}
+.field-wrap input:focus { border-color: #ff69b4; }
+.field-wrap input::placeholder { color: rgba(255,255,255,.3); }
+.eye-btn {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer; font-size: 1rem;
+}
+.check-label {
+  display: flex; align-items: center; gap: 8px; justify-content: center;
+  color: rgba(255,255,255,.55); font-size: .8rem; margin-bottom: 16px; cursor: pointer;
+}
+.check-label input { accent-color: #ff69b4; }
+.login-btn {
+  width: 100%; padding: 14px;
+  background: linear-gradient(135deg, #ff69b4, #c084fc);
+  border: none; border-radius: 14px; color: #fff;
+  font-size: 1rem; font-weight: 800; font-family: 'Nunito',sans-serif;
+  cursor: pointer; transition: transform .2s, box-shadow .2s;
+  box-shadow: 0 4px 24px rgba(255,105,180,.4);
+}
+.login-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(255,105,180,.6); }
+.err-msg { color: #ff6b6b; font-size: .8rem; margin-top: 10px; min-height: 16px; }
+
+/* ── MAIN SCENE ─────────────────────────────────────────── */
+.scene-bg {
+  position: fixed; inset: 0; z-index: 0;
+  background: url('background.jpg') center/cover no-repeat;
+  filter: brightness(.3);
+}
+.demo-content {
+  position: relative; z-index: 5;
+  height: 100vh; display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.demo-card {
+  background: rgba(255,255,255,.06); backdrop-filter: blur(18px);
+  border: 1px solid rgba(255,182,193,.2); border-radius: 20px;
+  padding: 32px; text-align: center; max-width: 420px;
+}
+.demo-card h2 { font-family: 'Klee One',cursive; font-size: 1.3rem; margin-bottom: 12px; }
+.demo-card p  { color: rgba(255,255,255,.65); font-size: .9rem; line-height: 1.7; margin-bottom: 18px; }
+.demo-hints { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.demo-hints span {
+  background: rgba(255,105,180,.15); border: 1px solid rgba(255,105,180,.3);
+  border-radius: 20px; padding: 5px 14px; font-size: .8rem; color: #ffb7c5;
+}
+
+/* ── COMPANION WIDGET ────────────────────────────────────── */
+.companion-widget {
+  position: fixed; bottom: 24px; right: 24px; z-index: 1000;
+  display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+}
+
+/* Speech Bubble */
+.speech-bubble {
+  background: rgba(255,255,255,.12); backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,182,193,.35); border-radius: 16px 16px 4px 16px;
+  padding: 10px 14px; max-width: 220px; font-size: .82rem;
+  color: #fff; line-height: 1.5; text-align: right;
+  animation: bubblePop .3s ease;
+  display: none;
+}
+.speech-bubble.show { display: block; }
+@keyframes bubblePop { from{transform:scale(.8);opacity:0} to{transform:scale(1);opacity:1} }
+
+/* Avatar Button */
+.companion-avatar-btn {
+  position: relative; width: 68px; height: 68px;
+  border-radius: 50%; cursor: pointer;
+  border: 3px solid rgba(255,182,193,.5);
+  overflow: visible; flex-shrink: 0;
+  transition: transform .25s;
+}
+.companion-avatar-btn:hover { transform: scale(1.08); }
+.companion-av-img {
+  width: 68px; height: 68px; border-radius: 50%;
+  object-fit: cover; display: block;
+  transition: filter .4s;
+}
+.companion-emotion-overlay {
+  position: absolute; inset: 0; border-radius: 50%;
+  pointer-events: none; z-index: 2; opacity: 0;
+  transition: opacity .4s, background .4s;
+}
+.emotion-badge {
+  position: absolute; bottom: -4px; right: -4px;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: #1a1a2e; border: 2px solid rgba(255,182,193,.4);
+  font-size: .9rem; display: flex; align-items: center; justify-content: center;
+  z-index: 3; transition: transform .3s;
+}
+.pulse-ring {
+  position: absolute; inset: -6px; border-radius: 50%;
+  border: 2px solid rgba(255,105,180,.5);
+  animation: pulseRing 2s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes pulseRing { 0%,100%{transform:scale(1);opacity:.6} 50%{transform:scale(1.15);opacity:.2} }
+
+/* Companion Panel */
+.companion-panel {
+  position: absolute; bottom: 80px; right: 0;
+  width: min(340px, 90vw);
+  background: rgba(10,10,26,.88); backdrop-filter: blur(24px);
+  border: 1px solid rgba(255,182,193,.25); border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 48px rgba(0,0,0,.6), 0 0 0 1px rgba(255,105,180,.1);
+  transform-origin: bottom right;
+  transform: scale(.9); opacity: 0; pointer-events: none;
+  transition: transform .3s cubic-bezier(.34,1.56,.64,1), opacity .25s;
+}
+.companion-panel.open {
+  transform: scale(1); opacity: 1; pointer-events: all;
+}
+
+/* Panel Header */
+.panel-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 12px;
+  background: rgba(255,105,180,.08); border-bottom: 1px solid rgba(255,182,193,.15);
+}
+.panel-hdr-left { display: flex; align-items: center; gap: 8px; }
+.pnl-av { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid #ff69b4; }
+.pnl-name { color: #fff; font-weight: 700; font-size: .9rem; display: block; }
+.pnl-emo-text { color: rgba(255,255,255,.5); font-size: .72rem; display: block; }
+.panel-hdr-right { display: flex; gap: 4px; }
+.pnl-btn {
+  background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+  border-radius: 8px; padding: 5px 7px; cursor: pointer; font-size: .85rem;
+  transition: background .2s;
+}
+.pnl-btn:hover { background: rgba(255,105,180,.2); }
+
+/* Emotion Picker */
+.emotion-picker {
+  display: flex; justify-content: space-around; padding: 8px 10px;
+  border-bottom: 1px solid rgba(255,182,193,.1);
+  background: rgba(0,0,0,.2);
+}
+.ep-btn {
+  background: none; border: 2px solid transparent; border-radius: 8px;
+  font-size: 1.15rem; cursor: pointer; padding: 3px 5px;
+  transition: transform .2s, border-color .2s, background .2s;
+}
+.ep-btn:hover  { transform: scale(1.2); background: rgba(255,255,255,.08); }
+.ep-btn.active { border-color: rgba(255,105,180,.5); background: rgba(255,105,180,.15); }
+
+/* Chat area */
+.panel-chat {
+  height: 220px; overflow-y: auto; padding: 12px;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.panel-chat::-webkit-scrollbar { width: 3px; }
+.panel-chat::-webkit-scrollbar-thumb { background: rgba(255,105,180,.3); border-radius: 3px; }
+.chat-welcome-msg {
+  text-align: center; color: rgba(255,255,255,.55);
+  font-size: .82rem; line-height: 1.7; padding: 10px 0;
+}
+
+/* Chat messages */
+.msg-row { display: flex; gap: 6px; align-items: flex-end; }
+.msg-row.user { flex-direction: row-reverse; }
+.msg-row.bot  { flex-direction: row; }
+.msg-av { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
+.msg-bbl {
+  padding: 8px 12px; border-radius: 14px; max-width: 75%;
+  font-size: .82rem; line-height: 1.5; color: #fff; word-break: break-word;
+  animation: msgPop .25s ease;
+}
+@keyframes msgPop { from{transform:scale(.85);opacity:0} to{transform:scale(1);opacity:1} }
+.msg-row.bot  .msg-bbl {
+  background: rgba(255,255,255,.1); border: 1px solid rgba(255,182,193,.2);
+  border-bottom-left-radius: 4px;
+}
+.msg-row.user .msg-bbl {
+  background: linear-gradient(135deg, #ff69b4, #c084fc);
+  border-bottom-right-radius: 4px;
+}
+.typing-bbl { display: flex; gap: 4px; align-items: center; padding: 10px 14px; }
+.typing-bbl span {
+  width: 6px; height: 6px; background: #ffb7c5; border-radius: 50%;
+  animation: typingDot 1s ease infinite;
+}
+.typing-bbl span:nth-child(2){animation-delay:.15s}
+.typing-bbl span:nth-child(3){animation-delay:.3s}
+@keyframes typingDot { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
+
+/* Panel Input */
+.panel-input {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 10px;
+  background: rgba(0,0,0,.3); border-top: 1px solid rgba(255,182,193,.1);
+}
+.panel-input input {
+  flex: 1; padding: 9px 12px;
+  background: rgba(255,255,255,.08); border: 1px solid rgba(255,182,193,.25);
+  border-radius: 12px; color: #fff; font-family: 'Nunito',sans-serif; font-size: .84rem;
+  outline: none;
+}
+.panel-input input::placeholder { color: rgba(255,255,255,.3); }
+.mic-btn, .send-btn {
+  width: 36px; height: 36px; border-radius: 50%; border: none;
+  cursor: pointer; font-size: .95rem; display: flex; align-items: center; justify-content: center;
+  transition: transform .15s;
+}
+.mic-btn  { background: rgba(255,255,255,.08); border: 1px solid rgba(255,182,193,.25); }
+.mic-btn.active { background: rgba(255,105,180,.3); }
+.send-btn { background: linear-gradient(135deg, #ff69b4, #c084fc); box-shadow: 0 2px 10px rgba(255,105,180,.4); }
+.mic-btn:hover, .send-btn:hover { transform: scale(1.08); }
+
+/* ── MODALS ─────────────────────────────────────────────── */
+.modal {
+  position: fixed; inset: 0; z-index: 2000;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity .3s;
+}
+.modal.open { opacity: 1; pointer-events: all; }
+.modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.8); backdrop-filter: blur(8px); }
+
+/* Hologram */
+.holo-container { position: relative; z-index: 1; text-align: center; }
+.holo-ring {
+  width: min(300px, 85vw); height: min(300px, 85vw);
+  border-radius: 50%; border: 2px solid #00f5ff; overflow: hidden;
+  position: relative; margin: 0 auto;
+  box-shadow: 0 0 40px rgba(0,245,255,.4), inset 0 0 40px rgba(0,245,255,.1);
+  animation: holoGlow 2s ease-in-out infinite;
+}
+@keyframes holoGlow {
+  0%,100%{box-shadow:0 0 40px rgba(0,245,255,.4),inset 0 0 40px rgba(0,245,255,.1)}
+  50%    {box-shadow:0 0 80px rgba(0,245,255,.7),inset 0 0 60px rgba(0,245,255,.2)}
+}
+#holoCanvas { width: 100%; height: 100%; display: block; }
+.holo-scanline {
+  position: absolute; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg,transparent,#00f5ff,transparent);
+  animation: holoScan 1.8s linear infinite; z-index: 5;
+}
+@keyframes holoScan { 0%{top:0} 100%{top:100%} }
+.holo-label {
+  color: #00f5ff; font-size: .7rem; letter-spacing: 4px; margin: 14px 0 10px;
+}
+.modal-close {
+  padding: 10px 26px; background: rgba(0,245,255,.1);
+  border: 1px solid #00f5ff; border-radius: 20px;
+  color: #00f5ff; cursor: pointer; font-family: 'Nunito',sans-serif; font-weight: 700;
+}
+
+/* Video Call */
+.vc-card {
+  position: relative; z-index: 1;
+  width: min(340px, 92vw); background: rgba(8,8,24,.95);
+  border: 1px solid rgba(255,182,193,.25); border-radius: 24px;
+  padding: 18px; text-align: center;
+  box-shadow: 0 0 60px rgba(255,105,180,.25);
+}
+.vc-header { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.vc-av { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; border: 2px solid #ff69b4; }
+.vc-info { flex: 1; text-align: left; }
+.vc-name   { font-weight: 700; font-size: .95rem; }
+.vc-status { color: rgba(255,255,255,.5); font-size: .75rem; margin-top: 2px; }
+.vc-emo    { font-size: 1.5rem; }
+.vc-visual-wrap { position: relative; border-radius: 14px; overflow: hidden; margin-bottom: 12px; }
+.vc-main   { width: 100%; max-height: 200px; object-fit: cover; filter: brightness(.8); border-radius: 14px; }
+.vc-emotion-anim {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-size: 4rem; opacity: 0; transition: opacity .3s; pointer-events: none;
+}
+.vc-emotion-anim.show { opacity: .85; animation: emojiPop .5s ease; }
+@keyframes emojiPop { 0%{transform:scale(0) rotate(-20deg)} 60%{transform:scale(1.3) rotate(5deg)} 100%{transform:scale(1) rotate(0deg)} }
+.vc-wave {
+  position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 3px; align-items: center; height: 28px;
+}
+.vc-wave span {
+  display: block; width: 4px; border-radius: 2px; background: #ff69b4;
+  animation: vcWave .8s ease-in-out infinite;
+}
+.vc-wave span:nth-child(1){height: 8px; animation-delay:0s}
+.vc-wave span:nth-child(2){height:18px; animation-delay:.1s}
+.vc-wave span:nth-child(3){height:26px; animation-delay:.2s}
+.vc-wave span:nth-child(4){height:18px; animation-delay:.3s}
+.vc-wave span:nth-child(5){height: 8px; animation-delay:.4s}
+@keyframes vcWave { 0%,100%{transform:scaleY(1)} 50%{transform:scaleY(1.8)} }
+.vc-wave.idle span { animation: none; height: 4px; }
+.vc-caption { color: rgba(255,255,255,.65); font-size: .8rem; min-height: 18px; font-style: italic; margin-bottom: 12px; }
+.vc-controls { display: flex; justify-content: center; gap: 20px; }
+.vc-ctrl {
+  width: 50px; height: 50px; border-radius: 50%; border: none;
+  font-size: 1.2rem; cursor: pointer; transition: transform .15s;
+}
+.vc-ctrl:hover { transform: scale(1.1); }
+.vc-ctrl.mute  { background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); }
+.vc-ctrl.end   { background: #e53935; }
+.vc-ctrl.speak { background: rgba(255,105,180,.2); border: 1px solid #ff69b4; }
+
+/* ── EMOTION ANIMATIONS on avatar ───────────────────────── */
+/* Applied to .companion-av-img via JS class toggles */
+.emo-happy    { filter: brightness(1.05) saturate(1.1); }
+.emo-excited  { animation: emoExcited .4s ease infinite alternate; filter: brightness(1.1) saturate(1.2) hue-rotate(5deg); }
+@keyframes emoExcited { from{transform:rotate(-3deg) scale(1.02)} to{transform:rotate(3deg) scale(1.06)} }
+.emo-shy      { filter: brightness(1) sepia(.2) saturate(1.3); }
+.emo-sad      { filter: brightness(.8) saturate(.7) blur(.3px); animation: emoSad 2s ease-in-out infinite alternate; }
+@keyframes emoSad { from{transform:translateY(0)} to{transform:translateY(3px)} }
+.emo-angry    { filter: hue-rotate(-20deg) saturate(1.5) brightness(1.05); animation: emoAngry .15s ease infinite alternate; }
+@keyframes emoAngry { from{transform:translateX(-2px)} to{transform:translateX(2px)} }
+.emo-love     { filter: brightness(1.08) saturate(1.2) hue-rotate(330deg); animation: emoLove .6s ease infinite alternate; }
+@keyframes emoLove { from{transform:scale(1)} to{transform:scale(1.04)} }
+.emo-surprised{ animation: emoSurprised .3s cubic-bezier(.34,1.56,.64,1); }
+@keyframes emoSurprised { from{transform:scale(.9)} to{transform:scale(1)} }
+.emo-sleepy   { filter: brightness(.75) saturate(.6); animation: emoSleepy 2s ease-in-out infinite; }
+@keyframes emoSleepy { 0%,100%{transform:rotate(0deg)} 50%{transform:rotate(2deg)} }
+
+/* Overlay tints per emotion */
+.ov-happy    { background: radial-gradient(circle, rgba(255,223,100,.12), transparent); opacity: .6!important; }
+.ov-excited  { background: radial-gradient(circle, rgba(255,180,0,.2), transparent);   opacity: .7!important; }
+.ov-shy      { background: radial-gradient(circle, rgba(255,100,100,.2), transparent); opacity: .6!important; }
+.ov-sad      { background: radial-gradient(circle, rgba(80,120,255,.25), transparent); opacity: .7!important; }
+.ov-angry    { background: radial-gradient(circle, rgba(255,50,50,.28), transparent);  opacity: .7!important; }
+.ov-love     { background: radial-gradient(circle, rgba(255,150,200,.25), transparent);opacity: .7!important; }
+.ov-surprised{ background: radial-gradient(circle, rgba(200,100,255,.2), transparent); opacity: .6!important; }
+.ov-sleepy   { background: radial-gradient(circle, rgba(80,80,160,.3), transparent);   opacity: .8!important; }
